@@ -6,6 +6,7 @@ package Tienda.Web.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 @Data
@@ -22,7 +23,10 @@ public class Categoria implements Serializable {
     private String descripcion;
     private String rutaImagen;
     private boolean activo;
-
+    
+        @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
+    private List<Producto> productos;
+        
     public Categoria() {
     }
 
@@ -30,4 +34,6 @@ public class Categoria implements Serializable {
         this.descripcion = categoria;
         this.activo = activo;
     }
+    
+    
 }

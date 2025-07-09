@@ -32,6 +32,7 @@ public class Producto implements Serializable {
     Categoria categoria;
 
     public Producto() {
+        
     }
 
     public Producto(String descripcion, boolean activo) {
