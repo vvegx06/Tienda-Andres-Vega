@@ -5,7 +5,9 @@
 package Tienda.Web.service.impl;
 
 import Tienda.Web.dao.CategoriaDao;
+import Tienda.Web.dao.ProductoDao;
 import Tienda.Web.domain.Categoria;
+import Tienda.Web.domain.Producto;
 import Tienda.Web.service.CategoriaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,15 +34,18 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional(readOnly = true)
     public Categoria getCategoria(Categoria categoria) {
         return categoriaDao.findById(categoria.getIdCategoria()).orElse(null);
-}
-@Override
+    }
+
+    @Override
     @Transactional
     public void save(Categoria categoria) {
         categoriaDao.save(categoria);
-}
-@Override
+    }
+
+    @Override
     @Transactional
     public void delete(Categoria categoria) {
         categoriaDao.delete(categoria);
-}
+    }
+
 }

@@ -8,7 +8,7 @@ package Tienda.Web.controller;
 import Tienda.Web.domain.Producto;
 import Tienda.Web.service.CategoriaService;
 import Tienda.Web.service.ProductoService;
-import Tienda.Web.service.impl.FirebaseStorageServiceImpl;
+import Tienda.Web.service.impl.FireBaseStorageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,44 +21,46 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/producto")
 public class ProductoController {
-  
+
     @Autowired
     private ProductoService productoService;
+
     @Autowired
     private CategoriaService categoriaService;
-    
+
+    @Autowired
+    private FireBaseStorageServiceImpl firebaseStorageService;
+
     @GetMapping("/listado")
     private String listado(Model model) {
         var productos = productoService.getProductos(false);
         model.addAttribute("productos", productos);
-        
+
         var categorias = categoriaService.getCategorias(false);
         model.addAttribute("categorias", categorias);
-        
-        model.addAttribute("totalProductos",productos.size());
+
+        model.addAttribute("totalProductos", productos.size());
         return "/producto/listado";
     }
-    
-     @GetMapping("/nuevo")
+
+    @GetMapping("/nuevo")
     public String productoNuevo(Producto producto) {
         return "/producto/modifica";
     }
 
-    @Autowired
-    private FirebaseStorageServiceImpl firebaseStorageService;
-    
     @PostMapping("/guardar")
     public String productoGuardar(Producto producto,
-            @RequestParam("imagenFile") MultipartFile imagenFile) {        
+            @RequestParam("imagenFile") MultipartFile imagenFile) {
         if (!imagenFile.isEmpty()) {
-            productoService.save(producto);
+            productoService.save(producto); // primero guardar para obtener el ID
             producto.setRutaImagen(
-                    firebaseStorageService.cargaImagen(
-                            imagenFile, 
-                            "producto", 
-                            producto.getIdProducto()));
+                firebaseStorageService.cargarImagen(
+                    imagenFile,
+                    "producto",
+                    producto.getIdProducto())
+            );
         }
-        productoService.save(producto);
+        productoService.save(producto); // guardar con imagen
         return "redirect:/producto/listado";
     }
 
@@ -72,10 +74,10 @@ public class ProductoController {
     public String productoModificar(Producto producto, Model model) {
         producto = productoService.getProducto(producto);
         model.addAttribute("producto", producto);
-        
+
         var categorias = categoriaService.getCategorias(false);
         model.addAttribute("categorias", categorias);
-        
+
         return "/producto/modifica";
-    }   
+    }
 }
