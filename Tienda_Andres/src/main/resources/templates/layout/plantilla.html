@@ -22,13 +22,27 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <div class="container">
                     <a th:href="@{/}" class="navbar-brand mb-0 h1">[[#{aplicacion.titulo}]]</a>
                     <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        "navbar-toggler-icon"></span>
+                        <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <ul class="navbar-nav" sec:authorize="hasRole ('ROLE_ADMIN')or hasRole ('ROLE_VENDEDOR')"> 
-                            <li class="nav-item px-2"><a class="nav-link" th:href="@{/categoria/listado}">[[#{plantilla.categorias}]]</a></li>
-                            <li class="nav-item px-2"><a class="nav-link" th:href="@{/producto/listado}">[[#{plantilla.productos}]]</a></li>                           
-                            <li class="nav-item dropdown" sec:authorize="hasRole ('ROLE_ADMIN')">
+
+                        <!-- Menú con restricción solo para ADMIN y VENDEDOR -->
+                        <ul class="navbar-nav" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_VENDEDOR')"> 
+                            <li class="nav-item px-2">
+                                <a class="nav-link" th:href="@{/categoria/listado}">[[#{plantilla.categorias}]]</a>
+                            </li>
+                        </ul>
+
+                        <!-- Enlace a productos visible para todos -->
+                        <ul class="navbar-nav">
+                            <li class="nav-item px-2">
+                                <a class="nav-link" th:href="@{/producto/listado}">[[#{plantilla.productos}]]</a>
+                            </li>
+                        </ul>
+
+                        <!-- Menú dropdown solo para ADMIN -->
+                        <ul class="navbar-nav" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" 
                                    data-bs-toggle="dropdown" 
                                    href="#" 
@@ -40,8 +54,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     <li><a class="dropdown-item" th:href="@{/usuario/listado}">[[#{plantilla.usuarios}]]</a></li>
                                 </ul>
                             </li>
-
                         </ul>
+
+                        <!-- Selector de idioma -->
                         <ul class="navbar-nav">
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">[[#{idioma}]]</a>
@@ -51,12 +66,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                 </ul>
                             </li>
                         </ul>
+
+                        <div id="resultsBlock"></div>
+
+                        <!-- Enlace login solo para no autenticados -->
                         <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
                             <li class="nav-item">
                                 <a class="nav-link" th:href="@{/login}"><i class="fas fa-sign-in-alt"></i></a>
                             </li>
                         </ul>
 
+                        <!-- Información usuario y logout para autenticados -->
                         <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                             <li class="nav-item text-white my-auto">
                                 <i class="fas fa-user"></i> <span sec:authentication="name">Bob</span>
@@ -92,5 +112,5 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             </div>
         </footer>
 
-
     </body>
+</html>

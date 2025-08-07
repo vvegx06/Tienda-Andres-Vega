@@ -19,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 
-@Controller // Asigna que va a ser un controller
-@RequestMapping("/usuario") // Asigna que va a ser un controller
+@Controller 
+@RequestMapping("/usuario") 
 public class UsuarioController {
 
     @Autowired
